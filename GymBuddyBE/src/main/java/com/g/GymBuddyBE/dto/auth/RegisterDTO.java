@@ -1,11 +1,11 @@
 package com.g.GymBuddyBE.dto.auth;
 
 public class RegisterDTO {
-    private String username;
+    private String email;
     private String password;
 
-    public String getUsername() {
-        return username;
+    public String getEmail() {
+        return email;
     }
 
     public String getPassword() {
@@ -15,7 +15,7 @@ public class RegisterDTO {
     @Override
     public String toString() {
         return "RegisterDTO{" +
-                "username='" + username + '\'' +
+                "username='" + email + '\'' +
                 ", password='" + password + '\'' +
                 '}';
     }

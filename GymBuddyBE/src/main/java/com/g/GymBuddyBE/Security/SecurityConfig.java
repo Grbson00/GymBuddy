@@ -12,11 +12,10 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
-    private final RequestMatcher MATCHER = new AntPathRequestMatcher("/**");
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity security) throws Exception {
-        security.csrf().disable().authorizeHttpRequests((request) -> request.requestMatchers(MATCHER).permitAll()
+        security.csrf().disable().authorizeHttpRequests((request) -> request.requestMatchers("/**").permitAll()
                 .anyRequest().authenticated()
         );
 

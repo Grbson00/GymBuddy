@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable, from } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 interface RegistrationData {
-  username: string,
+  email: string,
   password: string,
 }
 
@@ -14,7 +15,7 @@ export class AuthService {
 
   constructor(private http: HttpClient) { }
 
-  register = (data: RegistrationData) => {
-    return this.http.post<RegistrationData>(`${environment.api}/auth/register`, data);
+  register = (data: RegistrationData): Observable<any> => {
+    return from(this.http.post<RegistrationData>(`${environment.api}/auth/register`, data))
   }
 }

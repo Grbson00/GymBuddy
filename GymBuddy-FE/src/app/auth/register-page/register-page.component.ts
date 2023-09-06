@@ -1,17 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from '../auth.service';
+import { Subscription } from 'rxjs'
+import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register-page',
   templateUrl: './register-page.component.html',
   styleUrls: ['./register-page.component.css']
 })
-export class RegisterPageComponent implements OnInit {
+export class RegisterPageComponent implements OnInit, OnDestroy {
 
-  constructor(private formBuilder: FormBuilder, private service: AuthService) { }
+  constructor(private formBuilder: FormBuilder, private service: AuthService, private router: Router) { }
 
   registrationForm!: FormGroup;
+  subscription: Subscription = new Subscription();
 
   ngOnInit(): void {
     this.registrationForm = this.formBuilder.group(
@@ -33,20 +37,30 @@ export class RegisterPageComponent implements OnInit {
 
   onSubmit = () => {
     if (this.registrationForm.valid) {
-      console.log(this.registrationForm.value);
-      this.service.register(
-        {
-          username: this.registrationForm.get('username')?.value,
-          password: this.registrationForm.get('password')?.value
-        }).subscribe((response) => {
-          console.log(response);
-        },
-          (err) => {
-            console.log(err);
+      let dto = {
+        email: this.registrationForm.get('username')?.value,
+        password: this.registrationForm.get('password')?.value
+      }
+      console.log(dto);
 
+      this.subscription = this.service.register(dto).subscribe(
+        {
+          next: (response: any) => {
+            console.log(response);
+          },
+          error: (err: HttpErrorResponse) => {
+            console.error(err.error)
+          },
+          complete: () => {
+            this.router.navigate(['/login'])
           }
-        )
+        }
+      )
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
   }
 
 }
