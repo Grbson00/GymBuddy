@@ -1,6 +1,6 @@
 package com.g.GymBuddyBE.dto.auth;
 
-public class RegisterDTO {
+public class AuthDTO {
     private String email;
     private String password;
 
